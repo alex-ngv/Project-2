@@ -1,0 +1,9 @@
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><%= link_to 'View list', todos_path %></li>
+  <li><%= link_to 'New todo', new_todo_path %></li>
+  <li><%= link_to 'Articles', articles_path, class: 'btn btn-success' %></li>
+  <% Tab.all.each do |tab| %>
+  <li><%= link_to tab.name, tab  %></li>
+  <% end %>
+  <li>  <%= link_to 'New Tab', new_tab_path %></li>
+</ul>
