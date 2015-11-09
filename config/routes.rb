@@ -1,10 +1,33 @@
 Rails.application.routes.draw do
 
+  resources :comments
+  resources :users
   resources :tabs
   resources :todos
   resources :articles
-  root 'todos#index'
+  resources :authors
+  resources :tags
+  root 'articles#index'
 
+
+  resources :authors do
+    resources :articles
+    resources :comments
+  end
+
+  resources :articles do
+    resources :comments
+    resources :tags
+    get 'filtered_by_tags', :on => :collection
+  end
+
+
+
+
+  resources :author_sessions, only: [ :new, :create, :destroy ]
+
+  get 'login'  => 'author_sessions#new'
+  get 'logout' => 'author_sessions#destroy', :as => 'logout'
 
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -18,6 +41,14 @@ Rails.application.routes.draw do
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
+
+get 'articles/tags/:id' => 'articles#filtered_by_tags'
+
+resources :articles do
+
+end
+
+
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

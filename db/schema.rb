@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106044621) do
+ActiveRecord::Schema.define(version: 20151109043748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,11 +21,57 @@ ActiveRecord::Schema.define(version: 20151106044621) do
     t.text     "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "author_id"
   end
+
+  add_index "articles", ["author_id"], name: "index_articles_on_author_id", using: :btree
+
+  create_table "authors", force: :cascade do |t|
+    t.string   "username",         null: false
+    t.string   "email",            null: false
+    t.string   "crypted_password", null: false
+    t.string   "salt",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "auth_token"
+  end
+
+  add_index "authors", ["email"], name: "index_authors_on_email", unique: true, using: :btree
+
+  create_table "comments", force: :cascade do |t|
+    t.string   "author_name"
+    t.text     "body"
+    t.integer  "article_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "author_id"
+  end
+
+  add_index "comments", ["article_id"], name: "index_comments_on_article_id", using: :btree
+  add_index "comments", ["author_id"], name: "index_comments_on_author_id", using: :btree
 
   create_table "tabs", force: :cascade do |t|
     t.string   "name"
     t.string   "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+  end
+
+  add_index "tabs", ["user_id"], name: "index_tabs_on_user_id", using: :btree
+
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.integer  "article_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "taggings", ["article_id"], name: "index_taggings_on_article_id", using: :btree
+  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -37,4 +83,17 @@ ActiveRecord::Schema.define(version: 20151106044621) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "password_digest"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_foreign_key "articles", "authors"
+  add_foreign_key "comments", "articles"
+  add_foreign_key "comments", "authors"
+  add_foreign_key "tabs", "users"
+  add_foreign_key "taggings", "articles"
+  add_foreign_key "taggings", "tags"
 end

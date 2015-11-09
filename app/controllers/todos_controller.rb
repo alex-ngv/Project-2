@@ -58,7 +58,8 @@ class TodosController < ApplicationController
 
   # DELETE /todos/1
   # DELETE /todos/1.json
-  def destroy
+  def Destroy
+
     @todo.destroy
     respond_to do |format|
       flash[:success] = 'Todo was successfully destroyed.'

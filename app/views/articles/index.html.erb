@@ -1,12 +1,11 @@
+<% if params[:tag].present? %>
+<h1>Filtered by: <%=@filtertagname%></h1>
+<%end%>
 
-
-<h1>All Articles</h1>
-
-<ul id="articles">
-  <% @articles.each do |article| %>
-    <li>
-      <%= article.title%>
-    </li>
-    <li><%= article.body %></li>
+<% @articles.each do |article| %>
+    <h1>  <%= article.title%> </h1>
+    <p class="lead"><%= article.body %>
+    <%= link_to 'Destroy', article, method: :delete, class: 'btn btn-default' %>
+    <%= link_to 'Comments', article, class: 'btn btn-default'%>
+    </p>
   <% end %>
-</ul>

@@ -1,0 +1,7 @@
+<div>
+  <h4>Comment by <%= comment.author.username %></h4>
+  <p class="comment"><%= comment.body %></p>
+  <% if( current_user.id == comment.author_id) %>
+  <%= link_to 'Edit', edit_comment_path(comment), class: 'btn btn-default' %> <%= link_to 'Delete', comment, method: :delete, class: 'btn btn-default'  %>
+  <% end%>
+</div>
